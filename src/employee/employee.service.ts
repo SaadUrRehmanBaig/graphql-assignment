@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 //   CreateEmployeeInput,
 //   UpdateEmployeeInput,
 // } from './schema/employee.schema';
-import { Employee } from '@common/models/employee.model';
+import { Employee, EmployeeDocument } from '@common/models/employee.model';
 
 @Injectable()
 export class EmployeeService {
@@ -15,10 +15,10 @@ export class EmployeeService {
     private readonly envService: EnvService,
   ) {}
 
-  // async create(createEmployeeInput: CreateEmployeeInput): Promise<Employee> {
-  //   const createdEmployee = new this.employeeModel(createEmployeeInput);
-  //   return createdEmployee.save();
-  // }
+  async create(employee: EmployeeDocument): Promise<Employee> {
+    employee.password = await this.createHashedPassword(employee.password);
+    return (await this.employeeRepository.create(employee)).save();
+  }
 
   // async update(
   //   id: string,

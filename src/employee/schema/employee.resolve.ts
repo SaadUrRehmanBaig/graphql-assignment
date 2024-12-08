@@ -1,22 +1,41 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import {
+  CreateEmployeeInput,
   EmployeeType,
-  // CreateEmployeeInput,
   // UpdateEmployeeInput,
 } from '@common/dtos/EmployeeDtos';
-import { Employee } from '@common/models/employee.model';
+import { Employee, EmployeeDocument } from '@common/models/employee.model';
 import { EmployeeService } from '../employee.service';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@common/guards/jwt-auth/jwt-auth.guard';
+import { RoleGuard } from '@common/guards/role/role.guard';
+import { Roles } from '@common/decorators/role/roles.decorator';
+import { Role } from '@common/constants/enums';
 
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Resolver(() => EmployeeType)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  // @Mutation(() => EmployeeType)
-  // async createEmployee(
-  //   @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
-  // ): Promise<Employee> {
-  //   return this.employeeService.create(createEmployeeInput);
-  // }
+  @Roles(Role.SUPER_ADMIN)
+  @Mutation(() => EmployeeType)
+  async createAdmin(
+    @Args('createAdminInput') createAdminInput: CreateEmployeeInput,
+  ): Promise<Employee> {
+    const employee = createAdminInput as EmployeeDocument;
+    employee.role = Role.ADMIN;
+    return this.employeeService.create(employee);
+  }
+
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
+  @Mutation(() => EmployeeType)
+  async createEmployee(
+    @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
+  ): Promise<Employee> {
+    const employee = createEmployeeInput as EmployeeDocument;
+    employee.role = Role.Employee;
+    return this.employeeService.create(employee);
+  }
 
   // @Mutation(() => EmployeeType)
   // async updateEmployee(

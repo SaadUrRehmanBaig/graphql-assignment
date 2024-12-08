@@ -32,6 +32,6 @@ export class RoleGuard implements CanActivate {
       throw new UnauthorizedException('User not authenticated');
     }
 
-    return requiredRoles.some((role) => user.roles?.includes(role));
+    return requiredRoles.includes(user.role);
   }
 }

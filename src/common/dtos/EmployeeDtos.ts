@@ -30,39 +30,35 @@ export class EmployeeType {
   role: string;
 }
 
-// @InputType()
-// export class CreateEmployeeInput {
-//   @Field()
-//   @IsNotEmpty({ message: AppConstants.MESSGES.REQUIRED_EMAIL })
-//   @IsEmail({}, { message: AppConstants.MESSGES.EMAIL_PASSWORD_WRONG })
-//   email: string;
+@InputType()
+export class CreateEmployeeInput {
+  @Field()
+  @IsNotEmpty({ message: AppConstants.MESSGES.REQUIRED_EMAIL })
+  @IsEmail({}, { message: AppConstants.MESSGES.EMAIL_PASSWORD_WRONG })
+  email: string;
 
-//   @Field()
-//   @IsNotEmpty({ message: AppConstants.MESSGES.REQUIRED_NAME })
-//   name: string;
+  @Field()
+  @IsNotEmpty({ message: AppConstants.MESSGES.REQUIRED_NAME })
+  name: string;
 
-//   @Field({ nullable: true })
-//   @IsOptional()
-//   @Min(18, { message: AppConstants.MESSGES.UNDER_AGE })
-//   age: number;
+  @Field({ nullable: true })
+  @IsOptional()
+  @Min(18, { message: AppConstants.MESSGES.UNDER_AGE })
+  age: number;
 
-//   @Field({ nullable: true })
-//   class: string;
+  @Field({ nullable: true })
+  class: string;
 
-//   @Field(() => [String], { nullable: true })
-//   subjects: string[];
+  @Field(() => [String], { nullable: true })
+  subjects: string[];
 
-//   @Field({ nullable: true })
-//   attendance: number;
+  @Field({ nullable: true })
+  attendance: number;
 
-//   @Field()
-//   @IsEnum([Role.ADMIN, Role.Employee])
-//   role: string;
-
-//   @Field()
-//   @IsNotEmpty({ message: AppConstants.MESSGES.REQUIRED_PASSWORD })
-//   password: string;
-// }
+  @Field()
+  @IsNotEmpty({ message: AppConstants.MESSGES.REQUIRED_PASSWORD })
+  password: string;
+}
 
 // @InputType()
 // export class UpdateEmployeeInput {
