@@ -9,14 +9,17 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { ApolloDriver } from '@nestjs/apollo';
 import { EmployeeModule } from './employee/employee.module';
 import { AuthModule } from './auth/auth.module';
+import { EmployeeResolver } from './employee/schema/employee.resolve';
+import { EmployeeService } from './employee/employee.service';
 
 @Module({
   imports: [
-    // GraphQLModule.forRoot({
-    //   autoSchemaFile: true,
-    //   driver: ApolloDriver,
-    //   playground: true
-    // }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      driver: ApolloDriver,
+      playground: true,
+      context: ({ req }) => ({ req }),
+    }),
     MongooseModule.forRootAsync({
       inject: [EnvService],
       useFactory: (envService: EnvService) => ({
@@ -28,7 +31,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, EnvService],
+  providers: [AppService, EnvService, EmployeeResolver, EmployeeService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

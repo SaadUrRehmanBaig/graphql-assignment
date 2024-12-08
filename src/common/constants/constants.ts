@@ -16,5 +16,6 @@ export const AppConstants = Object.freeze({
     SUCCESSFUL_REQUEST: 'Request was successful',
     UNSUCCESSFUL_REQUEST: 'Request failed',
     SERVER_ERROR: 'Internal server error',
+    UNDER_AGE: 'Age must be 18 or above',
   },
 });

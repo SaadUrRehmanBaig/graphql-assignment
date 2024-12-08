@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { EmployeeRepository } from './employee.repository';
 import { EnvService } from 'src/common/env/env.service';
 import * as bcrypt from 'bcrypt';
+// import {
+//   CreateEmployeeInput,
+//   UpdateEmployeeInput,
+// } from './schema/employee.schema';
+import { Employee } from '@common/models/employee.model';
 
 @Injectable()
 export class EmployeeService {
@@ -10,15 +15,41 @@ export class EmployeeService {
     private readonly envService: EnvService,
   ) {}
 
+  // async create(createEmployeeInput: CreateEmployeeInput): Promise<Employee> {
+  //   const createdEmployee = new this.employeeModel(createEmployeeInput);
+  //   return createdEmployee.save();
+  // }
+
+  // async update(
+  //   id: string,
+  //   updateEmployeeInput: UpdateEmployeeInput,
+  // ): Promise<Employee> {
+  //   return this.employeeModel.findByIdAndUpdate(id, updateEmployeeInput, {
+  //     new: true,
+  //   });
+  // }
+
+  async findAll(): Promise<Employee[]> {
+    return this.employeeRepository.findAll();
+  }
+
+  async findOne(id: string): Promise<Employee> {
+    return this.employeeRepository.findOneById(id);
+  }
+
   async onApplicationBootstrap() {
-    const hashedPassword = await bcrypt.hash(
+    const hashedPassword = await this.createHashedPassword(
       this.envService.get('SUPER_PASSWORD'),
-      10,
     );
     this.employeeRepository.createSuperAdmin({
       email: this.envService.get('SUPER_USER'),
       name: 'Super-Admin',
       password: hashedPassword,
     });
+  }
+
+  async createHashedPassword(password: string): Promise<string> {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return hashedPassword;
   }
 }
